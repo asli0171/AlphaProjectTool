@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>CI Pipeline</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+
+<h1 th:text="'CI pipeline for projekt: ' + ${project.name}"></h1>
+
+<p><a th:href="@{/projects}">&larr; Tilbage til projekter</a></p>
+
+<p th:if="${message}" th:text="${message}" style="color: green;"></p>
+
+<form th:action="@{|/projects/${project.id}/pipeline|}" th:object="${pipeline}" method="post">
+    <label>Navn:
+        <input type="text" th:field="*{name}">
+    </label><br>
+
+    <label>CI-værktøj:
+        <input type="text" th:field="*{ciTool}">
+    </label><br>
+
+    <label>Endpoint URL:
+        <input type="text" th:field="*{endpointUrl}">
+    </label><br>
+
+    <label>Branch:
+        <input type="text" th:field="*{branch}">
+    </label><br>
+
+    <button type="submit">Gem pipeline</button>
+</form>
+
+<div th:if="${pipeline.id != null}">
+    <h2>Status</h2>
+    <p>Status: <span th:text="${pipeline.status}"></span></p>
+    <p>Sidste kørsel: <span th:text="${pipeline.lastRun}"></span></p>
+
+    <form th:action="@{|/projects/${project.id}/pipeline/trigger|}" method="post">
+        <button type="submit">Trigger build</button>
+    </form>
+</div>
+
+</body>
+</html>
