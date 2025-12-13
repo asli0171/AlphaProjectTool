@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Project</title>
+</head>
+<body>
+
+<h1 th:text="${project.name}">Project</h1>
+
+<ul>
+    <li><strong>ID:</strong> <span th:text="${project.projectId}"></span></li>
+    <li><strong>Customer:</strong> <span th:text="${project.customer}"></span></li>
+    <li><strong>Status:</strong> <span th:text="${project.status}"></span></li>
+    <li><strong>Start:</strong> <span th:text="${project.startDate}"></span></li>
+    <li><strong>End:</strong> <span th:text="${project.endDate}"></span></li>
+</ul>
+
+<a th:href="@{|/projects/${project.projectId}/tasks|}">Tasks</a>
+<span> | </span>
+<a th:href="@{|/projects/${project.projectId}/edit|}">Edit</a>
+<span> | </span>
+<a th:href="@{/projects}">Back</a>
+
+</body>
+</html>

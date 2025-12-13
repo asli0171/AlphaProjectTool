@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Project report</title>
+</head>
+<body>
+
+<h1>Project report</h1>
+
+<div>
+    <strong>Project:</strong> <span th:text="${report.projectName}"></span>
+    <span> | </span>
+    <strong>Customer:</strong> <span th:text="${report.customer}"></span>
+    <span> | </span>
+    <strong>Status:</strong> <span th:text="${report.status}"></span>
+    <span> | </span>
+    <strong>Total hours:</strong> <span th:text="${report.totalHours}"></span>
+</div>
+
+<table border="1" cellpadding="6">
+    <thead>
+    <tr>
+        <th>Task</th>
+        <th>Status</th>
+        <th>Total hours</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="t : ${report.tasks}">
+        <td th:text="${t.taskName}"></td>
+        <td th:text="${t.status}"></td>
+        <td th:text="${t.totalHours}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/reports}">Back</a>
+
+</body>
+</html>
