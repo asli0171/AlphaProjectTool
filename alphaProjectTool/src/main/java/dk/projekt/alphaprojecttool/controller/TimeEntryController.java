@@ -6,14 +6,10 @@ import dk.projekt.alphaprojecttool.model.TimeEntry;
 import dk.projekt.alphaprojecttool.service.ProjectService;
 import dk.projekt.alphaprojecttool.service.TaskService;
 import dk.projekt.alphaprojecttool.service.TimeEntryService;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/projects/{projectId}/tasks/{taskId}/timeentries")
@@ -42,13 +38,13 @@ public class TimeEntryController {
     }
 
     @GetMapping
-    public String listTimeEntries(@ModelAttribute("task") Task task, Model model) {
+    public String list(@ModelAttribute("task") Task task, Model model) {
         model.addAttribute("timeEntries", timeEntryService.findByTask(task));
         return "timeentries/list";
     }
 
     @GetMapping("/new")
-    public String showCreateForm(@ModelAttribute("task") Task task, Model model) {
+    public String createForm(@ModelAttribute("task") Task task, Model model) {
         TimeEntry timeEntry = new TimeEntry();
         timeEntry.setTask(task);
         model.addAttribute("timeEntry", timeEntry);
@@ -56,39 +52,41 @@ public class TimeEntryController {
     }
 
     @GetMapping("/{timeEntryId}/edit")
-    public String showEditForm(@PathVariable Long timeEntryId,
-                               @ModelAttribute("task") Task task,
-                               Model model,
-                               RedirectAttributes redirectAttributes) {
-        Optional<TimeEntry> entryOpt = timeEntryService.findById(timeEntryId);
-        if (entryOpt.isEmpty()) {
+    public String editForm(@PathVariable Long timeEntryId,
+                           @ModelAttribute("task") Task task,
+                           Model model,
+                           RedirectAttributes redirectAttributes) {
+        TimeEntry timeEntry = timeEntryService.findById(timeEntryId).orElse(null);
+        if (timeEntry == null) {
             redirectAttributes.addFlashAttribute("error", "Tidsregistrering ikke fundet");
-            return "redirect:/projects/" + task.getProject().getId() + "/tasks/" + task.getId() + "/timeentries";
+            return "redirect:/projects/" + task.getProject().getProjectId()
+                    + "/tasks/" + task.getTaskId()
+                    + "/timeentries";
         }
-        model.addAttribute("timeEntry", entryOpt.get());
+        model.addAttribute("timeEntry", timeEntry);
         return "timeentries/form";
     }
 
     @PostMapping
-    public String saveTimeEntry(@ModelAttribute("task") Task task,
-                                @Valid @ModelAttribute("timeEntry") TimeEntry timeEntry,
-                                BindingResult bindingResult,
-                                RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            return "timeentries/form";
-        }
+    public String save(@ModelAttribute("task") Task task,
+                       @ModelAttribute TimeEntry timeEntry,
+                       RedirectAttributes redirectAttributes) {
         timeEntry.setTask(task);
         timeEntryService.save(timeEntry);
         redirectAttributes.addFlashAttribute("message", "Tidsregistrering gemt");
-        return "redirect:/projects/" + task.getProject().getId() + "/tasks/" + task.getId() + "/timeentries";
+        return "redirect:/projects/" + task.getProject().getProjectId()
+                + "/tasks/" + task.getTaskId()
+                + "/timeentries";
     }
 
     @PostMapping("/{timeEntryId}/delete")
-    public String deleteTimeEntry(@PathVariable Long timeEntryId,
-                                  @ModelAttribute("task") Task task,
-                                  RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable Long timeEntryId,
+                         @ModelAttribute("task") Task task,
+                         RedirectAttributes redirectAttributes) {
         timeEntryService.deleteById(timeEntryId);
         redirectAttributes.addFlashAttribute("message", "Tidsregistrering slettet");
-        return "redirect:/projects/" + task.getProject().getId() + "/tasks/" + task.getId() + "/timeentries";
+        return "redirect:/projects/" + task.getProject().getProjectId()
+                + "/tasks/" + task.getTaskId()
+                + "/timeentries";
     }
 }

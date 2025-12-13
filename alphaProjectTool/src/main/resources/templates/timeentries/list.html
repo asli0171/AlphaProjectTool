@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Time entries</title>
+</head>
+<body>
+
+<h1>Time entries</h1>
+
+<div>
+    <strong>Project:</strong> <span th:text="${project.name}"></span>
+    <span> | </span>
+    <strong>Task:</strong> <span th:text="${task.name}"></span>
+</div>
+
+<a th:href="@{|/projects/${project.projectId}/tasks/${task.taskId}/timeentries/new|}">New time entry</a>
+<span> | </span>
+<a th:href="@{|/projects/${project.projectId}/tasks|}">Back to tasks</a>
+
+<table border="1" cellpadding="6">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Hours</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="e : ${timeEntries}">
+        <td th:text="${e.timeEntryId}"></td>
+        <td th:text="${e.date}"></td>
+        <td th:text="${e.hours}"></td>
+        <td th:text="${e.description}"></td>
+        <td>
+            <a th:href="@{|/projects/${project.projectId}/tasks/${task.taskId}/timeentries/${e.timeEntryId}/edit|}">Edit</a>
+            <span> | </span>
+            <form th:action="@{|/projects/${project.projectId}/tasks/${task.taskId}/timeentries/${e.timeEntryId}/delete|}" method="post" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

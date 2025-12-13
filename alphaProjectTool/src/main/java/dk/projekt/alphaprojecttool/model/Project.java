@@ -1,5 +1,5 @@
 package dk.projekt.alphaprojecttool.model;
-import dk.projekt.alphaprojecttool.model.CiPipeline;
+
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,20 +23,6 @@ public class Project {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
-
-    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private CiPipeline ciPipeline;
-
-    public CiPipeline getCiPipeline() {
-        return ciPipeline;
-    }
-
-    public void setCiPipeline(CiPipeline ciPipeline) {
-        this.ciPipeline = ciPipeline;
-        if(ciPipeline!= null){
-            ciPipeline.setProject(this);
-        }
-    }
 
     public Long getProjectId() {
         return projectId;

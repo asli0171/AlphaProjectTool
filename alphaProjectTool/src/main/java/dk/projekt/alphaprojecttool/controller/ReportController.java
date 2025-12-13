@@ -1,7 +1,5 @@
 package dk.projekt.alphaprojecttool.controller;
 
-import dk.projekt.alphaprojecttool.model.Project;
-import dk.projekt.alphaprojecttool.service.ProjectService;
 import dk.projekt.alphaprojecttool.service.ReportService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,23 +10,19 @@ import org.springframework.web.bind.annotation.*;
 public class ReportController {
 
     private final ReportService reportService;
-    private final ProjectService projectService;
 
-    public ReportController(ReportService reportService, ProjectService projectService) {
+    public ReportController(ReportService reportService) {
         this.reportService = reportService;
-        this.projectService = projectService;
     }
 
-    @GetMapping("/projects")
-    public String projectOverview(Model model) {
+    @GetMapping
+    public String index(Model model) {
         model.addAttribute("projectSummaries", reportService.getProjectSummaries());
-        return "reports/projects";
+        return "reports/index";
     }
 
     @GetMapping("/projects/{projectId}")
     public String projectReport(@PathVariable Long projectId, Model model) {
-        Project project = projectService.findById(projectId).orElseThrow();
-        model.addAttribute("project", project);
         model.addAttribute("report", reportService.getProjectReport(projectId));
         return "reports/project-detail";
     }

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/alphaProjectTool.iml" filepath="$PROJECT_DIR$/.idea/alphaProjectTool.iml" />
+      <module fileurl="file://$PROJECT_DIR$/alphaProjectTool/alphaProjectTool.iml" filepath="$PROJECT_DIR$/alphaProjectTool/alphaProjectTool.iml" />
     </modules>
   </component>
 </project>

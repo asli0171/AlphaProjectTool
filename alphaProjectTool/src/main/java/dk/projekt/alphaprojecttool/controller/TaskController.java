@@ -4,14 +4,10 @@ import dk.projekt.alphaprojecttool.model.Project;
 import dk.projekt.alphaprojecttool.model.Task;
 import dk.projekt.alphaprojecttool.service.ProjectService;
 import dk.projekt.alphaprojecttool.service.TaskService;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/projects/{projectId}/tasks")
@@ -31,13 +27,13 @@ public class TaskController {
     }
 
     @GetMapping
-    public String listTasks(@ModelAttribute("project") Project project, Model model) {
+    public String list(@ModelAttribute("project") Project project, Model model) {
         model.addAttribute("tasks", taskService.findByProject(project));
         return "tasks/list";
     }
 
     @GetMapping("/new")
-    public String showCreateForm(@ModelAttribute("project") Project project, Model model) {
+    public String createForm(@ModelAttribute("project") Project project, Model model) {
         Task task = new Task();
         task.setProject(project);
         model.addAttribute("task", task);
@@ -45,39 +41,30 @@ public class TaskController {
     }
 
     @GetMapping("/{taskId}/edit")
-    public String showEditForm(@PathVariable Long taskId,
-                               @ModelAttribute("project") Project project,
-                               Model model,
-                               RedirectAttributes redirectAttributes) {
-        Optional<Task> taskOpt = taskService.findById(taskId);
-        if (taskOpt.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Opgave ikke fundet");
-            return "redirect:/projects/" + project.getId() + "/tasks";
-        }
-        model.addAttribute("task", taskOpt.get());
+    public String editForm(@PathVariable Long taskId,
+                           @ModelAttribute("project") Project project,
+                           Model model) {
+        Task task = taskService.findById(taskId).orElseThrow();
+        model.addAttribute("task", task);
         return "tasks/form";
     }
 
     @PostMapping
-    public String saveTask(@ModelAttribute("project") Project project,
-                           @Valid @ModelAttribute("task") Task task,
-                           BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            return "tasks/form";
-        }
+    public String save(@ModelAttribute("project") Project project,
+                       @ModelAttribute Task task,
+                       RedirectAttributes redirectAttributes) {
         task.setProject(project);
         taskService.save(task);
         redirectAttributes.addFlashAttribute("message", "Opgave gemt");
-        return "redirect:/projects/" + project.getId() + "/tasks";
+        return "redirect:/projects/" + project.getProjectId() + "/tasks";
     }
 
     @PostMapping("/{taskId}/delete")
-    public String deleteTask(@PathVariable Long taskId,
-                             @ModelAttribute("project") Project project,
-                             RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable Long taskId,
+                         @ModelAttribute("project") Project project,
+                         RedirectAttributes redirectAttributes) {
         taskService.deleteById(taskId);
         redirectAttributes.addFlashAttribute("message", "Opgave slettet");
-        return "redirect:/projects/" + project.getId() + "/tasks";
+        return "redirect:/projects/" + project.getProjectId() + "/tasks";
     }
 }
