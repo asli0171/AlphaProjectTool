@@ -9,5 +9,4 @@ public class AlphaProjectToolApplication {
     public static void main(String[] args) {
         SpringApplication.run(AlphaProjectToolApplication.class, args);
     }
-
 }

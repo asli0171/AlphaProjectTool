@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${task.taskId} != null ? 'Edit Task' : 'New Task'">Task</title>
+</head>
+<body>
+
+<h1 th:text="${task.taskId} != null ? 'Edit Task' : 'New Task'">Task</h1>
+
+<form th:action="@{|/projects/${project.projectId}/tasks|}" th:object="${task}" method="post">
+    <input type="hidden" th:field="*{taskId}"/>
+
+    <div>
+        <label>Name</label>
+        <input th:field="*{name}"/>
+    </div>
+
+    <div>
+        <label>Description</label>
+        <textarea th:field="*{description}"></textarea>
+    </div>
+
+    <div>
+        <label>Status</label>
+        <select th:field="*{status}">
+            <option th:each="s : ${T(dk.alpha.alphaprojecttool.model.TaskStatus).values()}"
+                    th:value="${s}" th:text="${s}">
+            </option>
+        </select>
+    </div>
+
+    <button type="submit">Save</button>
+    <a th:href="@{|/projects/${project.projectId}/tasks|}">Cancel</a>
+</form>
+
+</body>
+</html>
