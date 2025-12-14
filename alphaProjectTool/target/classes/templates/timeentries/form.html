@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${timeEntry.timeEntryId} != null ? 'Edit Time Entry' : 'New Time Entry'">TimeEntry</title>
+</head>
+<body>
+
+<h1 th:text="${timeEntry.timeEntryId} != null ? 'Edit Time Entry' : 'New Time Entry'">TimeEntry</h1>
+
+<form th:action="@{|/projects/${project.projectId}/tasks/${task.taskId}/timeentries|}" th:object="${timeEntry}" method="post">
+    <input type="hidden" th:field="*{timeEntryId}"/>
+
+    <div>
+        <label>Date</label>
+        <input type="date" th:field="*{date}"/>
+    </div>
+
+    <div>
+        <label>Hours</label>
+        <input type="number" step="0.25" th:field="*{hours}"/>
+    </div>
+
+    <div>
+        <label>Description</label>
+        <textarea th:field="*{description}"></textarea>
+    </div>
+
+    <button type="submit">Save</button>
+    <a th:href="@{|/projects/${project.projectId}/tasks/${task.taskId}/timeentries|}">Cancel</a>
+</form>
+
+</body>
+</html>

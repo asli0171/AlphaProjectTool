@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+</head>
+<body>
+
+<h1>Tasks</h1>
+
+<div>
+    <strong>Project:</strong>
+    <span th:text="${project.name}"></span>
+</div>
+
+<a th:href="@{|/projects/${project.projectId}/tasks/new|}">New task</a>
+<span> | </span>
+<a th:href="@{|/projects/${project.projectId}|}">Back to project</a>
+
+<table border="1" cellpadding="6">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="t : ${tasks}">
+        <td th:text="${t.taskId}"></td>
+        <td th:text="${t.name}"></td>
+        <td th:text="${t.status}"></td>
+        <td>
+            <a th:href="@{|/projects/${project.projectId}/tasks/${t.taskId}/edit|}">Edit</a>
+            <span> | </span>
+            <a th:href="@{|/projects/${project.projectId}/tasks/${t.taskId}/timeentries|}">Time entries</a>
+            <span> | </span>
+            <form th:action="@{|/projects/${project.projectId}/tasks/${t.taskId}/delete|}" method="post" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
