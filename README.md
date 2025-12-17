@@ -1,4 +1,4 @@
-# alpha-project-tool
+<img width="1915" height="1000" alt="image" src="https://github.com/user-attachments/assets/0dc57e7c-e0a2-4975-998d-e59625441d5a" /># alpha-project-tool
 Projektnavn: Alpha Solutions Project Tool
 
 Et webbaseret projektkalkulationsværktøj til projekt, opgave og tidsstyring. Systemet understøtter rollebaseret adgang, projekter, opgaer, tidsregistrering og rapportering. 
@@ -19,4 +19,7 @@ Deployment (Azure)
 2. Azure app service modtager deployment automatisk
 3. Forbindelsesstrenge sættes som miljøvariabler
 4. Azure profil aktiveres via spring.profiles.active=azure
+
+
+Azure url : https://alphasolutions-projecttool-eaa6bde7eweza5c2.norwayeast-01.azurewebsites.net/
 
